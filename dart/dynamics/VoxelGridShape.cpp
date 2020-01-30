@@ -73,6 +73,10 @@ octomap::pose6d toPose6d(const Eigen::Isometry3d &frame) {
 
 //==============================================================================
 VoxelGridShape::VoxelGridShape(double resolution) : Shape() {
+  std::cout << "(sniyaz): Control should never reach VoxelGridShape()! KILL."
+            << std::endl;
+  exit(0);
+
   setOctree(fcl_make_shared<octomap::OcTree>(resolution));
 
   mVariance = DYNAMIC_ELEMENTS;
@@ -81,6 +85,10 @@ VoxelGridShape::VoxelGridShape(double resolution) : Shape() {
 //==============================================================================
 VoxelGridShape::VoxelGridShape(fcl_shared_ptr<octomap::OcTree> octree)
     : Shape() {
+  std::cout << "(sniyaz): Control should never reach VoxelGridShape()! KILL."
+            << std::endl;
+  exit(0);
+
   if (!octree) {
     dtwarn << "[VoxelGridShape] Attempting to assign null octree. Creating an "
            << "empty octree with resolution 0.01 instead.\n";

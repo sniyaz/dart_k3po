@@ -44,6 +44,10 @@ namespace dynamics {
 //==============================================================================
 template <typename S>
 HeightmapShape<S>::HeightmapShape() : Shape(HEIGHTMAP), mScale(1, 1, 1) {
+  std::cout << "(sniyaz): Control should never reach HeightmapShape()! KILL."
+            << std::endl;
+  exit(0);
+
   static_assert(std::is_same<S, float>::value || std::is_same<S, double>::value,
                 "Height field needs to be double or float");
 }
