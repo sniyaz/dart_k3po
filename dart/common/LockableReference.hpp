@@ -46,8 +46,7 @@ namespace common {
 /// This class is compatible to BasicLockable concept so that it can be used
 /// as a template parameter that requires BasicLockable concept such as
 /// std::lock_guard.
-class LockableReference
-{
+class LockableReference {
 public:
   /// Default construtor
   constexpr LockableReference() noexcept = default;
@@ -69,15 +68,14 @@ public:
 
 protected:
   /// Copy construction is not allowed.
-  LockableReference(const LockableReference&) = delete;
+  LockableReference(const LockableReference &) = delete;
 };
 
 /// This class references a single lockable.
 ///
 /// \tparam LockableT The standard C++ Lockable concept object type.
 template <typename LockableT>
-class SingleLockableReference final : public LockableReference
-{
+class SingleLockableReference final : public LockableReference {
 public:
   using Lockable = LockableT;
 
@@ -86,8 +84,8 @@ public:
   /// \param[in] lockableHolder Weak pointer to an object that holds the
   /// lockable. This is used to check whether the lockable holder is not
   /// destructed before lock/unlock.
-  SingleLockableReference(
-      std::weak_ptr<const void> lockableHolder, Lockable& lockable) noexcept;
+  SingleLockableReference(std::weak_ptr<const void> lockableHolder,
+                          Lockable &lockable) noexcept;
 
   // Documentation inherited
   void lock() override;
@@ -103,7 +101,7 @@ private:
   std::weak_ptr<const void> mLockableHolder;
 
   /// Lockable this class references.
-  Lockable& mLockable;
+  Lockable &mLockable;
 };
 
 /// MultiLockableReference references multiple lockables.
@@ -114,8 +112,7 @@ private:
 ///
 /// \tparam LockableT The standard C++ Lockable concept object type.
 template <typename LockableT>
-class MultiLockableReference final : public LockableReference
-{
+class MultiLockableReference final : public LockableReference {
 public:
   using Lockable = LockableT;
 
@@ -127,10 +124,8 @@ public:
   /// \param[in] first First iterator of lockable to be added to this class.
   /// \param[in] last Last iterator of lockable to be added to this class.
   template <typename InputIterator>
-  MultiLockableReference(
-      std::weak_ptr<const void> lockableHolder,
-      InputIterator first,
-      InputIterator last);
+  MultiLockableReference(std::weak_ptr<const void> lockableHolder,
+                         InputIterator first, InputIterator last);
 
   // Documentation inherited
   void lock() override;
@@ -143,18 +138,16 @@ public:
 
 private:
   /// Converts reference to pointer.
-  template <typename T>
-  T* ptr(T& obj);
+  template <typename T> T *ptr(T &obj);
 
   /// Returns pointer as it is.
-  template <typename T>
-  T* ptr(T* obj);
+  template <typename T> T *ptr(T *obj);
 
   /// Weak pointer to the lockable holder.
   std::weak_ptr<const void> mLockableHolder;
 
   /// lockables this class references.
-  std::vector<Lockable*> mLockables;
+  std::vector<Lockable *> mLockables;
 };
 
 } // namespace common

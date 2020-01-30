@@ -37,17 +37,16 @@
 
 #if HAVE_OCTOMAP
 
-#include <octomap/octomap.h>
 #include "dart/collision/fcl/BackwardCompatibility.hpp"
 #include "dart/dynamics/Frame.hpp"
 #include "dart/dynamics/Shape.hpp"
+#include <octomap/octomap.h>
 
 namespace dart {
 namespace dynamics {
 
 /// VoxelGridShape represents a probabilistic 3D occupancy voxel grid.
-class VoxelGridShape : public Shape
-{
+class VoxelGridShape : public Shape {
 public:
   /// Constructor.
   /// \param[in] resolution Size of voxel. Default is 0.01.
@@ -61,10 +60,10 @@ public:
   ~VoxelGridShape() override = default;
 
   // Documentation inherited.
-  const std::string& getType() const override;
+  const std::string &getType() const override;
 
   /// Returns shape type for this class
-  static const std::string& getStaticType();
+  static const std::string &getStaticType();
 
   /// Sets octree.
   void setOctree(fcl_shared_ptr<octomap::OcTree> octree);
@@ -82,7 +81,7 @@ public:
   ///
   /// \param[in] point Location of the sensor measurement.
   /// \param[in] occupied True if the location was measured occupied.
-  void updateOccupancy(const Eigen::Vector3d& point, bool occupied = true);
+  void updateOccupancy(const Eigen::Vector3d &point, bool occupied = true);
 
   /// Updates the occupancy probability of the voxels given sensor measurement,
   /// which is a single ray.
@@ -95,7 +94,7 @@ public:
   ///
   /// \param from Origin of sensor in global coordinates.
   /// \param to Endpoint of measurement in global coordinates.
-  void updateOccupancy(const Eigen::Vector3d& from, const Eigen::Vector3d& to);
+  void updateOccupancy(const Eigen::Vector3d &from, const Eigen::Vector3d &to);
 
   /// Updates the occupancy probability of the voxels given sensor measurement.
   ///
@@ -112,10 +111,10 @@ public:
   /// \param[in] sensorOrigin Origin of sensor relative to frame.
   /// \param[in] relativeTo Reference frame, determines transform to be
   /// applied to point cloud and sensor origin.
-  void updateOccupancy(
-      const octomap::Pointcloud& pointCloud,
-      const Eigen::Vector3d& sensorOrigin = Eigen::Vector3d::Zero(),
-      const Frame* relativeTo = Frame::World());
+  void
+  updateOccupancy(const octomap::Pointcloud &pointCloud,
+                  const Eigen::Vector3d &sensorOrigin = Eigen::Vector3d::Zero(),
+                  const Frame *relativeTo = Frame::World());
 
   /// Updates the occupancy probability of the voxels given sensor measurement.
   ///
@@ -132,19 +131,18 @@ public:
   /// \param[in] sensorOrigin Origin of sensor relative to frame.
   /// \param[in] relativeTo Reference frame, determines transform to be
   /// applied to point cloud and sensor origin.
-  void updateOccupancy(
-      const octomap::Pointcloud& pointCloud,
-      const Eigen::Vector3d& sensorOrigin,
-      const Eigen::Isometry3d& relativeTo);
+  void updateOccupancy(const octomap::Pointcloud &pointCloud,
+                       const Eigen::Vector3d &sensorOrigin,
+                       const Eigen::Isometry3d &relativeTo);
 
   /// Returns occupancy probability of a node that contains \c point.
-  double getOccupancy(const Eigen::Vector3d& point) const;
+  double getOccupancy(const Eigen::Vector3d &point) const;
 
   // Documentation inherited.
   Eigen::Matrix3d computeInertia(double mass) const override;
 
   // Documentation inherited.
-  void notifyColorUpdated(const Eigen::Vector4d& color) override;
+  void notifyColorUpdated(const Eigen::Vector4d &color) override;
 
 protected:
   // Documentation inherited.

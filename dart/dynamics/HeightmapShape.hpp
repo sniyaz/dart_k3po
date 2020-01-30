@@ -42,15 +42,13 @@ namespace dynamics {
 ///
 /// \tparam S_ Data type used for height map. At this point, only double and
 /// float are supported. Short and char can be added at a later point.
-template <typename S_>
-class HeightmapShape : public Shape
-{
+template <typename S_> class HeightmapShape : public Shape {
 public:
   using S = S_;
 
   using Vector3 = Eigen::Matrix<S, 3, 1>;
-  using HeightField
-      = Eigen::Matrix<S, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  using HeightField =
+      Eigen::Matrix<S, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
   /// Constructor.
   HeightmapShape();
@@ -59,10 +57,10 @@ public:
   ~HeightmapShape() override = default;
 
   // Documentation inherited.
-  const std::string& getType() const override;
+  const std::string &getType() const override;
 
   /// Returns shape type for this class
-  static const std::string& getStaticType();
+  static const std::string &getStaticType();
 
   /// \copydoc Shape::computeInertia()
   ///
@@ -73,10 +71,10 @@ public:
 
   /// Sets scale of this heightmap.
   /// \param[in] scale Scale of the height map.
-  void setScale(const Vector3& scale);
+  void setScale(const Vector3 &scale);
 
   /// Returns scale of this heightmap.
-  const Vector3& getScale() const;
+  const Vector3 &getScale() const;
 
   /// Sets the height field.
   ///
@@ -98,10 +96,8 @@ public:
   /// this shape, the min/max height value is also the min/max z value (so if
   /// the minimum height value is -100, the lowest terrain point will be -100,
   /// times the z scale to be applied).
-  void setHeightField(
-      const std::size_t& width,
-      const std::size_t& depth,
-      const std::vector<S>& heights);
+  void setHeightField(const std::size_t &width, const std::size_t &depth,
+                      const std::vector<S> &heights);
 
   /// Sets the height field.
   ///
@@ -123,13 +119,13 @@ public:
   /// min/max height value is also the min/max z value (so if the minimum height
   /// value is -100, the lowest terrain point will be -100, times the z scale to
   /// be applied).
-  void setHeightField(const HeightField& heights);
+  void setHeightField(const HeightField &heights);
 
   /// Returns the height field.
-  const HeightField& getHeightField() const;
+  const HeightField &getHeightField() const;
 
   /// Returns the modified height field. See also setHeightField().
-  HeightField& getHeightFieldModifiable() const;
+  HeightField &getHeightFieldModifiable() const;
 
   /// Flips the y values in the height field.
   void flipY() const;
@@ -147,7 +143,7 @@ public:
   S getMaxHeight() const;
 
   /// Set the color of this arrow
-  void notifyColorUpdated(const Eigen::Vector4d& color) override;
+  void notifyColorUpdated(const Eigen::Vector4d &color) override;
 
 protected:
   // Documentation inherited.
@@ -163,7 +159,7 @@ protected:
   /// Computes the bounding box of the height field.
   /// \param[out] min Mininum of box
   /// \param[out] max Maxinum of box
-  void computeBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const;
+  void computeBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
 
 private:
   /// Scale of the heightmap
