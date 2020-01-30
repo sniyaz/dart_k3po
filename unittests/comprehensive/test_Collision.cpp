@@ -611,8 +611,9 @@ TEST_F(COLLISION, SimpleFrames)
   // testSimpleFrames(fcl_mesh_fcl);
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testSimpleFrames(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testSimpleFrames(bullet);
 #endif
 
   auto dart = DARTCollisionDetector::create();
@@ -747,8 +748,9 @@ TEST_F(COLLISION, SphereSphere)
 #endif
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testSphereSphere(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testSphereSphere(bullet);
 #endif
 
   auto dart = DARTCollisionDetector::create();
@@ -855,8 +857,9 @@ TEST_F(COLLISION, BoxBox)
 #endif
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testBoxBox(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testBoxBox(bullet);
 #endif
 
   auto dart = DARTCollisionDetector::create();
@@ -986,8 +989,9 @@ TEST_F(COLLISION, testCylinderCylinder)
 #endif
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testCylinderCylinder(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testCylinderCylinder(bullet);
 #endif
 
   // auto dart = DARTCollisionDetector::create();
@@ -1057,8 +1061,9 @@ TEST_F(COLLISION, testCapsuleCapsule)
 #endif
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testCapsuleCapsule(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testCapsuleCapsule(bullet);
 #endif
 
   // auto dart = DARTCollisionDetector::create();
@@ -1285,18 +1290,20 @@ void testHeightmapBox(CollisionDetector* cd,
 TEST_F(COLLISION, testHeightmapBox)
 {
 #if HAVE_ODE
-  auto ode = OdeCollisionDetector::create();
-  // TODO take this message out as soon as testing is done
-  dtdbg << "Testing ODE (float)" << std::endl;
-  testHeightmapBox<float>(ode.get(), true, true, 0.05);
-
-  // TODO take this message out as soon as testing is done
-  dtdbg << "Testing ODE (double)" << std::endl;
-  testHeightmapBox<double>(ode.get(), true, true, 0.05);
+  // NOTE: (sniyaz): This is taken out since we kill-switch HeightmapShape
+  // anyway.
+  // auto ode = OdeCollisionDetector::create();
+  // // TODO take this message out as soon as testing is done
+  // dtdbg << "Testing ODE (float)" << std::endl;
+  // testHeightmapBox<float>(ode.get(), true, true, 0.05);
+  //
+  // // TODO take this message out as soon as testing is done
+  // dtdbg << "Testing ODE (double)" << std::endl;
+  // testHeightmapBox<double>(ode.get(), true, true, 0.05);
 #endif
 
 #if HAVE_BULLET
-  // NOTE: This is taken out since we kill-switch Bullet anyway.
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
   // auto bullet = BulletCollisionDetector::create();
   //
   // // TODO take this message out as soon as testing is done
@@ -1311,85 +1318,88 @@ TEST_F(COLLISION, testHeightmapBox)
 // Tests HeightmapShape::flipY();
 TEST_F(COLLISION, HeightmapFlipY)
 {
-  using S = double;
+  // NOTE: (sniyaz): This is taken out since we kill-switch HeightmapShape
+  // anyway.
 
-  std::vector<S> heights1 = {-1, -2, 2, 1};
-  auto shape = std::make_shared<HeightmapShape<S>>();
-  shape->setHeightField(2, 2, heights1);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights1[2]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights1[3]);
-  EXPECT_EQ(shape->getHeightField().data()[2], heights1[0]);
-  EXPECT_EQ(shape->getHeightField().data()[3], heights1[1]);
-
-  // test with odd number of rows
-  std::vector<S> heights2 = {-1, -2, 3, 3, 2, 1};
-  shape->setHeightField(2, 3, heights2);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights2[4]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights2[5]);
-  EXPECT_EQ(shape->getHeightField().data()[2], heights2[2]);
-  EXPECT_EQ(shape->getHeightField().data()[3], heights2[3]);
-  EXPECT_EQ(shape->getHeightField().data()[4], heights2[0]);
-  EXPECT_EQ(shape->getHeightField().data()[5], heights2[1]);
-
-  // test higher number of rows
-  std::vector<S> heights3 = {1, -1, 2, -2, 3, -3, 4, -4};
-  shape->setHeightField(2, 4, heights3);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights3[6]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights3[7]);
-  EXPECT_EQ(shape->getHeightField().data()[2], heights3[4]);
-  EXPECT_EQ(shape->getHeightField().data()[3], heights3[5]);
-  EXPECT_EQ(shape->getHeightField().data()[4], heights3[2]);
-  EXPECT_EQ(shape->getHeightField().data()[5], heights3[3]);
-  EXPECT_EQ(shape->getHeightField().data()[6], heights3[0]);
-  EXPECT_EQ(shape->getHeightField().data()[7], heights3[1]);
-
-  // test wider rows
-  std::vector<S> heights4 =
-    {1, -1, 1.5, 2, -2, 2.5,  3, -3, 3.5, 4, -4, 4.5};
-  shape->setHeightField(3, 4, heights4);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights4[9]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights4[10]);
-  EXPECT_EQ(shape->getHeightField().data()[2], heights4[11]);
-  EXPECT_EQ(shape->getHeightField().data()[3], heights4[6]);
-  EXPECT_EQ(shape->getHeightField().data()[4], heights4[7]);
-  EXPECT_EQ(shape->getHeightField().data()[5], heights4[8]);
-  EXPECT_EQ(shape->getHeightField().data()[6], heights4[3]);
-  EXPECT_EQ(shape->getHeightField().data()[7], heights4[4]);
-  EXPECT_EQ(shape->getHeightField().data()[8], heights4[5]);
-  EXPECT_EQ(shape->getHeightField().data()[9], heights4[0]);
-  EXPECT_EQ(shape->getHeightField().data()[10], heights4[1]);
-  EXPECT_EQ(shape->getHeightField().data()[11], heights4[2]);
-
-  // test mini (actually meaningless) height field
-  std::vector<S> heights5 = {1, 2};
-  shape->setHeightField(1, 2, heights5);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights5[1]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights5[0]);
-
-  // test height field with only one row (which is actually meaningless)
-  std::vector<S> heights6 = {1, 2};
-  shape->setHeightField(2, 1, heights6);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights6[0]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights6[1]);
-
-  // test height field with only one column (which is actually meaningless)
-  std::vector<S> heights7 = {1, 2};
-  shape->setHeightField(1, 2, heights7);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights7[1]);
-  EXPECT_EQ(shape->getHeightField().data()[1], heights7[0]);
-
-  // test height field with only one col and row (which is actually meaningless)
-  std::vector<S> heights8 = {1};
-  shape->setHeightField(1, 1, heights8);
-  shape->flipY();
-  EXPECT_EQ(shape->getHeightField().data()[0], heights8[0]);
+  // using S = double;
+  //
+  // std::vector<S> heights1 = {-1, -2, 2, 1};
+  // auto shape = std::make_shared<HeightmapShape<S>>();
+  // shape->setHeightField(2, 2, heights1);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights1[2]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights1[3]);
+  // EXPECT_EQ(shape->getHeightField().data()[2], heights1[0]);
+  // EXPECT_EQ(shape->getHeightField().data()[3], heights1[1]);
+  //
+  // // test with odd number of rows
+  // std::vector<S> heights2 = {-1, -2, 3, 3, 2, 1};
+  // shape->setHeightField(2, 3, heights2);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights2[4]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights2[5]);
+  // EXPECT_EQ(shape->getHeightField().data()[2], heights2[2]);
+  // EXPECT_EQ(shape->getHeightField().data()[3], heights2[3]);
+  // EXPECT_EQ(shape->getHeightField().data()[4], heights2[0]);
+  // EXPECT_EQ(shape->getHeightField().data()[5], heights2[1]);
+  //
+  // // test higher number of rows
+  // std::vector<S> heights3 = {1, -1, 2, -2, 3, -3, 4, -4};
+  // shape->setHeightField(2, 4, heights3);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights3[6]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights3[7]);
+  // EXPECT_EQ(shape->getHeightField().data()[2], heights3[4]);
+  // EXPECT_EQ(shape->getHeightField().data()[3], heights3[5]);
+  // EXPECT_EQ(shape->getHeightField().data()[4], heights3[2]);
+  // EXPECT_EQ(shape->getHeightField().data()[5], heights3[3]);
+  // EXPECT_EQ(shape->getHeightField().data()[6], heights3[0]);
+  // EXPECT_EQ(shape->getHeightField().data()[7], heights3[1]);
+  //
+  // // test wider rows
+  // std::vector<S> heights4 =
+  //   {1, -1, 1.5, 2, -2, 2.5,  3, -3, 3.5, 4, -4, 4.5};
+  // shape->setHeightField(3, 4, heights4);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights4[9]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights4[10]);
+  // EXPECT_EQ(shape->getHeightField().data()[2], heights4[11]);
+  // EXPECT_EQ(shape->getHeightField().data()[3], heights4[6]);
+  // EXPECT_EQ(shape->getHeightField().data()[4], heights4[7]);
+  // EXPECT_EQ(shape->getHeightField().data()[5], heights4[8]);
+  // EXPECT_EQ(shape->getHeightField().data()[6], heights4[3]);
+  // EXPECT_EQ(shape->getHeightField().data()[7], heights4[4]);
+  // EXPECT_EQ(shape->getHeightField().data()[8], heights4[5]);
+  // EXPECT_EQ(shape->getHeightField().data()[9], heights4[0]);
+  // EXPECT_EQ(shape->getHeightField().data()[10], heights4[1]);
+  // EXPECT_EQ(shape->getHeightField().data()[11], heights4[2]);
+  //
+  // // test mini (actually meaningless) height field
+  // std::vector<S> heights5 = {1, 2};
+  // shape->setHeightField(1, 2, heights5);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights5[1]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights5[0]);
+  //
+  // // test height field with only one row (which is actually meaningless)
+  // std::vector<S> heights6 = {1, 2};
+  // shape->setHeightField(2, 1, heights6);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights6[0]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights6[1]);
+  //
+  // // test height field with only one column (which is actually meaningless)
+  // std::vector<S> heights7 = {1, 2};
+  // shape->setHeightField(1, 2, heights7);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights7[1]);
+  // EXPECT_EQ(shape->getHeightField().data()[1], heights7[0]);
+  //
+  // // test height field with only one col and row (which is actually meaningless)
+  // std::vector<S> heights8 = {1};
+  // shape->setHeightField(1, 1, heights8);
+  // shape->flipY();
+  // EXPECT_EQ(shape->getHeightField().data()[0], heights8[0]);
 }
 
 //==============================================================================
@@ -1416,8 +1426,9 @@ TEST_F(COLLISION, Options)
   // testOptions(fcl_mesh_fcl);
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testOptions(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testOptions(bullet);
 #endif
 
   auto dart = DARTCollisionDetector::create();
@@ -1518,8 +1529,9 @@ TEST_F(COLLISION, Filter)
   // testFilter(fcl_mesh_fcl);
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testFilter(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testFilter(bullet);
 #endif
 
   auto dart = DARTCollisionDetector::create();
@@ -1620,8 +1632,9 @@ TEST_F(COLLISION, CreateCollisionGroupFromVariousObject)
   // testCreateCollisionGroups(fcl_mesh_fcl);
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-  testCreateCollisionGroups(bullet);
+  // NOTE: (sniyaz): This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  // testCreateCollisionGroups(bullet);
 #endif
 
   auto dart = DARTCollisionDetector::create();
@@ -1733,34 +1746,37 @@ TEST_F(COLLISION, Factory)
 #if HAVE_OCTOMAP && FCL_HAVE_OCTOMAP
 TEST_F(COLLISION, VoxelGrid)
 {
-  auto simpleFrame1 = SimpleFrame::createShared(Frame::World());
-  auto simpleFrame2 = SimpleFrame::createShared(Frame::World());
+  // NOTE: (sniyaz): This is taken out since we kill-switch VoxelGridShape
+  // anyway.
 
-  auto shape1 = std::make_shared<VoxelGridShape>(0.01);
-  auto shape2 = std::make_shared<SphereShape>(0.001);
-
-  simpleFrame1->setShape(shape1);
-  simpleFrame2->setShape(shape2);
-
-  auto cd = FCLCollisionDetector::create();
-  auto group = cd->createCollisionGroup(simpleFrame1.get(), simpleFrame2.get());
-
-  EXPECT_EQ(group->getNumShapeFrames(), 2u);
-
-  collision::CollisionOption option;
-  option.enableContact = true;
-
-  collision::CollisionResult result;
-
-  result.clear();
-  simpleFrame2->setTranslation(Eigen::Vector3d(0.0, 0.0, 0.0));
-  EXPECT_FALSE(group->collide(option, &result));
-  EXPECT_TRUE(result.getNumContacts() == 0u);
-
-  result.clear();
-  shape1->updateOccupancy(Eigen::Vector3d(0.0, 0.0, 0.0), true);
-  simpleFrame2->setTranslation(Eigen::Vector3d(0.0, 0.0, 0.0));
-  EXPECT_TRUE(group->collide(option, &result));
-  EXPECT_TRUE(result.getNumContacts() >= 1u);
+  // auto simpleFrame1 = SimpleFrame::createShared(Frame::World());
+  // auto simpleFrame2 = SimpleFrame::createShared(Frame::World());
+  //
+  // auto shape1 = std::make_shared<VoxelGridShape>(0.01);
+  // auto shape2 = std::make_shared<SphereShape>(0.001);
+  //
+  // simpleFrame1->setShape(shape1);
+  // simpleFrame2->setShape(shape2);
+  //
+  // auto cd = FCLCollisionDetector::create();
+  // auto group = cd->createCollisionGroup(simpleFrame1.get(), simpleFrame2.get());
+  //
+  // EXPECT_EQ(group->getNumShapeFrames(), 2u);
+  //
+  // collision::CollisionOption option;
+  // option.enableContact = true;
+  //
+  // collision::CollisionResult result;
+  //
+  // result.clear();
+  // simpleFrame2->setTranslation(Eigen::Vector3d(0.0, 0.0, 0.0));
+  // EXPECT_FALSE(group->collide(option, &result));
+  // EXPECT_TRUE(result.getNumContacts() == 0u);
+  //
+  // result.clear();
+  // shape1->updateOccupancy(Eigen::Vector3d(0.0, 0.0, 0.0), true);
+  // simpleFrame2->setTranslation(Eigen::Vector3d(0.0, 0.0, 0.0));
+  // EXPECT_TRUE(group->collide(option, &result));
+  // EXPECT_TRUE(result.getNumContacts() >= 1u);
 }
 #endif // HAVE_OCTOMAP && FCL_HAVE_OCTOMAP
