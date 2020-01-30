@@ -326,6 +326,10 @@ double BulletCollisionDetector::distance(
 BulletCollisionDetector::BulletCollisionDetector()
   : CollisionDetector()
 {
+  std::cout << "(sniyaz): Control should never reach BulletCollisionDetector()! KILL."
+            << std::endl;
+  exit(0);
+
   mCollisionObjectManager.reset(new ManagerForUnsharableCollisionObjects(this));
 }
 
