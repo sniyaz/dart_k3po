@@ -1296,12 +1296,13 @@ TEST_F(COLLISION, testHeightmapBox)
 #endif
 
 #if HAVE_BULLET
-  auto bullet = BulletCollisionDetector::create();
-
-  // TODO take this message out as soon as testing is done
-  dtdbg << "Testing Bullet (float)" << std::endl;
-  // bullet so far only supports float height fields, so don't test double here.
-  testHeightmapBox<float>(bullet.get(), false, false);
+  // NOTE: This is taken out since we kill-switch Bullet anyway.
+  // auto bullet = BulletCollisionDetector::create();
+  //
+  // // TODO take this message out as soon as testing is done
+  // dtdbg << "Testing Bullet (float)" << std::endl;
+  // // bullet so far only supports float height fields, so don't test double here.
+  // testHeightmapBox<float>(bullet.get(), false, false);
 
 #endif
 }
