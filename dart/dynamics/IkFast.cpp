@@ -113,17 +113,19 @@ void convertIkSolution(
 
     const auto dofIndex = dofIndices[index];
 
-    if (solutionValues[i] < skel->getDof(dofIndex)->getPositionLowerLimit())
-    {
-      limitViolated = true;
-      break;
-    }
-
-    if (solutionValues[i] > skel->getDof(dofIndex)->getPositionUpperLimit())
-    {
-      limitViolated = true;
-      break;
-    }
+    // NOTE: We need to ignore this because of wierd 2pi issues with ADA.
+    // TODO: Submit bug upstream.
+    // if (solutionValues[i] < skel->getDof(dofIndex)->getPositionLowerLimit())
+    // {
+    //   limitViolated = true;
+    //   break;
+    // }
+    //
+    // if (solutionValues[i] > skel->getDof(dofIndex)->getPositionUpperLimit())
+    // {
+    //   limitViolated = true;
+    //   break;
+    // }
 
     index++;
   }
