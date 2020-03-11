@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -41,46 +41,23 @@ namespace dart {
 namespace dynamics {
 
 //==============================================================================
-bool HierarchicalIK::solve(bool applySolution)
-{
-  if (applySolution)
-  {
-    return solveAndApply(true);
-  }
-  else
-  {
-    Eigen::VectorXd positions;
-    return findSolution(positions);
-  }
-}
-
-//==============================================================================
-bool HierarchicalIK::solve(Eigen::VectorXd& positions, bool applySolution)
-{
-  if (applySolution)
-    return solveAndApply(positions, true);
-  else
-    return findSolution(positions);
-}
-
-//==============================================================================
-bool HierarchicalIK::findSolution(Eigen::VectorXd& positions)
+bool HierarchicalIK::solve(bool _applySolution)
 {
   if(nullptr == mSolver)
   {
-    dtwarn << "[HierarchicalIK::findSolution] The Solver for a HierarchicalIK "
-           << "module associated with [" << mSkeleton.lock()->getName()
-           << "] is a nullptr. You must reset the module's Solver before you "
-           << "can use it.\n";
+    dtwarn << "[HierarchicalIK::solve] The Solver for a HierarchicalIK module "
+           << "associated with [" << mSkeleton.lock()->getName() << "] is a "
+           << "nullptr. You must reset the module's Solver before you can use "
+           << "it.\n";
     return false;
   }
 
   if(nullptr == mProblem)
   {
-    dtwarn << "[HierarchicalIK::findSolution] The Problem for a HierarchicalIK "
-           << "module associated with [" << mSkeleton.lock()->getName()
-           << "] is a nullptr. You must reset the module's Problem before you "
-           << "can use it.\n";
+    dtwarn << "[HierarchicalIK::solve] The Problem for a HierarchicalIK module "
+           << "associated with [" << mSkeleton.lock()->getName() << "] is a "
+           << "nullptr. You must reset the module's Problem before you can use "
+           << "it.\n";
     return false;
   }
 
@@ -88,8 +65,8 @@ bool HierarchicalIK::findSolution(Eigen::VectorXd& positions)
 
   if(nullptr == skel)
   {
-    dtwarn << "[HierarchicalIK::findSolution] Calling a HierarchicalIK module "
-           << "which is associated with a Skeleton that no longer exists.\n";
+    dtwarn << "[HierarchicalIK::solve] Calling a HierarchicalIK module which "
+           << "is associated with a Skeleton that no longer exists.\n";
     return false;
   }
 
@@ -109,39 +86,24 @@ bool HierarchicalIK::findSolution(Eigen::VectorXd& positions)
 
   refreshIKHierarchy();
 
-  // Many GradientMethod implementations use Joint::integratePositions, so we
-  // need to clear out any velocities that might be in the Skeleton and then
-  // reset those velocities later. This has been opened as issue #699.
-  const Eigen::VectorXd originalVelocities = skel->getVelocities();
-  skel->resetVelocities();
+  if(_applySolution)
+  {
+    bool wasSolved = mSolver->solve();
+    setPositions(mProblem->getOptimalSolution());
+    return wasSolved;
+  }
 
-  const Eigen::VectorXd originalPositions = skel->getPositions();
-  const bool wasSolved = mSolver->solve();
-
-  positions = mProblem->getOptimalSolution();
-
+  Eigen::VectorXd originalPositions = skel->getPositions();
+  bool wasSolved = mSolver->solve();
   setPositions(originalPositions);
-  skel->setVelocities(originalVelocities);
   return wasSolved;
 }
 
 //==============================================================================
-bool HierarchicalIK::solveAndApply(bool allowIncompleteResult)
+bool HierarchicalIK::solve(Eigen::VectorXd& positions, bool _applySolution)
 {
-  Eigen::VectorXd solution;
-  const auto wasSolved = findSolution(solution);
-  if (wasSolved || allowIncompleteResult)
-    setPositions(solution);
-  return wasSolved;
-}
-
-//==============================================================================
-bool HierarchicalIK::solveAndApply(
-    Eigen::VectorXd& positions, bool allowIncompleteResult)
-{
-  const auto wasSolved = findSolution(positions);
-  if (wasSolved || allowIncompleteResult)
-    setPositions(positions);
+  bool wasSolved = solve(_applySolution);
+  positions = mProblem->getOptimalSolution();
   return wasSolved;
 }
 

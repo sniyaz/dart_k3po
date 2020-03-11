@@ -43,7 +43,8 @@
 namespace dart {
 namespace collision {
 
-struct BulletCollisionShape {
+struct BulletCollisionShape
+{
   std::unique_ptr<btCollisionShape> mCollisionShape;
 
   /// Relative transform of the shape to the collision object
@@ -51,8 +52,9 @@ struct BulletCollisionShape {
   /// Defaults to identity.
   std::unique_ptr<btTransform> mRelativeTransform;
 
-  BulletCollisionShape(std::unique_ptr<btCollisionShape> collisionShape,
-                       const btTransform &relativeTransform);
+  BulletCollisionShape(
+      std::unique_ptr<btCollisionShape> collisionShape,
+      const btTransform& relativeTransform);
 
   explicit BulletCollisionShape(std::unique_ptr<btCollisionShape> collShape);
 };

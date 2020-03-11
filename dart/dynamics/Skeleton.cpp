@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -384,8 +384,8 @@ std::mutex& Skeleton::getMutex() const
 //==============================================================================
 std::unique_ptr<common::LockableReference> Skeleton::getLockableReference() const
 {
-  return std::unique_ptr<common::SingleLockableReference<std::mutex>>(
-      new common::SingleLockableReference<std::mutex>(mPtr, mMutex));
+  return common::make_unique<common::SingleLockableReference<std::mutex>>(
+      mPtr, mMutex);
 }
 
 //==============================================================================
@@ -398,23 +398,11 @@ Skeleton::~Skeleton()
 //==============================================================================
 SkeletonPtr Skeleton::clone() const
 {
-  return cloneSkeleton(getName());
+  return clone(getName());
 }
 
 //==============================================================================
 SkeletonPtr Skeleton::clone(const std::string& cloneName) const
-{
-  return cloneSkeleton(cloneName);
-}
-
-//==============================================================================
-SkeletonPtr Skeleton::cloneSkeleton() const
-{
-  return cloneSkeleton(getName());
-}
-
-//==============================================================================
-SkeletonPtr Skeleton::cloneSkeleton(const std::string& cloneName) const
 {
   SkeletonPtr skelClone = Skeleton::create(cloneName);
 
@@ -469,34 +457,7 @@ SkeletonPtr Skeleton::cloneSkeleton(const std::string& cloneName) const
   skelClone->setName(cloneName);
   skelClone->setState(getState());
 
-  // Fix mimic joint references
-  for(std::size_t i=0; i<getNumJoints(); ++i)
-  {
-    Joint* joint = skelClone->getJoint(i);
-    if(joint->getActuatorType() == Joint::MIMIC)
-    {
-      const Joint* mimicJoint = skelClone->getJoint(joint->getMimicJoint()->getName());
-      if(mimicJoint)
-      {
-        joint->setMimicJoint(mimicJoint, joint->getMimicMultiplier(), joint->getMimicOffset());
-      }
-      else
-      {
-        dterr << "[Skeleton::clone] Failed to clone mimic joint successfully: "
-              << "Unable to find the mimic joint ["
-              << joint->getMimicJoint()->getName()
-              << "] in the cloned Skeleton. Please report this as a bug!\n";
-      }
-    }
-  }
-
   return skelClone;
-}
-
-//==============================================================================
-MetaSkeletonPtr Skeleton::cloneMetaSkeleton(const std::string& cloneName) const
-{
-  return cloneSkeleton(cloneName);
 }
 
 //==============================================================================

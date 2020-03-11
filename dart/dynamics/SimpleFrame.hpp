@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -55,7 +55,7 @@ public:
   DART_DEFINE_ALIGNED_SHARED_OBJECT_CREATOR(SimpleFrame)
 
   /// Constructor
-  explicit SimpleFrame(Frame* _refFrame = Frame::World(),
+  explicit SimpleFrame(Frame* _refFrame,
     const std::string& _name = "simple_frame",
     const Eigen::Isometry3d& _relativeTransform = Eigen::Isometry3d::Identity());
 
@@ -64,7 +64,7 @@ public:
   SimpleFrame(const SimpleFrame& _otherFrame, Frame* _refFrame = Frame::World());
 
   /// Destructor
-  ~SimpleFrame() override;
+  virtual ~SimpleFrame();
 
   // Documentation inherited
   const std::string& setName(const std::string& _name) override;

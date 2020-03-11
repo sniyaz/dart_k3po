@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -113,18 +113,17 @@ void convertIkSolution(
 
     const auto dofIndex = dofIndices[index];
 
-    // NOTE: We need to ignore this because of wierd 2pi issues with ADA.
-    // if (solutionValues[i] < skel->getDof(dofIndex)->getPositionLowerLimit())
-    // {
-    //   limitViolated = true;
-    //   break;
-    // }
-    //
-    // if (solutionValues[i] > skel->getDof(dofIndex)->getPositionUpperLimit())
-    // {
-    //   limitViolated = true;
-    //   break;
-    // }
+    if (solutionValues[i] < skel->getDof(dofIndex)->getPositionLowerLimit())
+    {
+      limitViolated = true;
+      break;
+    }
+
+    if (solutionValues[i] > skel->getDof(dofIndex)->getPositionUpperLimit())
+    {
+      limitViolated = true;
+      break;
+    }
 
     index++;
   }

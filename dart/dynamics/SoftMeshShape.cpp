@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -109,7 +109,7 @@ void SoftMeshShape::_buildMesh()
   int nFaces    = mSoftBodyNode->getNumFaces();
 
   // Create new aiMesh
-  mAssimpMesh = std::unique_ptr<aiMesh>(new aiMesh());
+  mAssimpMesh = common::make_unique<aiMesh>();
 
   // Set vertices and normals
   mAssimpMesh->mNumVertices = nVertices;

@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2011-2018, The DART development contributors
+ * Copyright (c) 2016, Graphics Lab, Georgia Tech Research Corporation
+ * Copyright (c) 2016, Humanoid Lab, Georgia Tech Research Corporation
+ * Copyright (c) 2016, Personal Robotics Lab, Carnegie Mellon University
  * All rights reserved.
- *
- * The list of contributors can be found at:
- *   https://github.com/dartsim/dart/blob/master/LICENSE
  *
  * This file is provided under the following "BSD-style" License:
  *   Redistribution and use in source and binary forms, with or
@@ -30,30 +29,30 @@
  *   POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "dart/dynamics/UniversalJoint.hpp"
+#ifndef DART_UTILS_URDF_URDFTYPES_HPP_
+#define DART_UTILS_URDF_URDFTYPES_HPP_
+
+#include "dart/config.h"
+
+#if URDFDOM_HEADERS_VERSION_AT_LEAST(1,0,0)
+#include <memory>
+#else
+#include "boost/shared_ptr.hpp"
+#include "boost/weak_ptr.hpp"
+#endif
 
 namespace dart {
-namespace dynamics {
-namespace detail {
+namespace utils {
 
-//==============================================================================
-UniversalJointUniqueProperties::UniversalJointUniqueProperties(
-    const Eigen::Vector3d& _axis1, const Eigen::Vector3d& _axis2)
-  : mAxis({_axis1.normalized(), _axis2.normalized()})
-{
-  // Do nothing
-}
+#if URDFDOM_HEADERS_VERSION_AT_LEAST(1,0,0)
+template <typename T> using urdf_shared_ptr = std::shared_ptr<T>;
+template <typename T> using urdf_weak_ptr = std::weak_ptr<T>;
+#else
+template <typename T> using urdf_shared_ptr = boost::shared_ptr<T>;
+template <typename T> using urdf_weak_ptr = boost::weak_ptr<T>;
+#endif
 
-//==============================================================================
-UniversalJointProperties::UniversalJointProperties(
-    const GenericJoint<math::R2Space>::Properties& genericJointProperties,
-    const UniversalJointUniqueProperties& universalProperties)
-  : GenericJoint<math::R2Space>::Properties(genericJointProperties),
-    UniversalJointUniqueProperties(universalProperties)
-{
-  // Do nothing
-}
-
-} // namespace detail
-} // namespace dynamics
+} // namespace utils
 } // namespace dart
+
+#endif // DART_UTILS_URDF_URDFTYPES_HPP_

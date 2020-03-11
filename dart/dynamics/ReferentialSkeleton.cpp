@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -45,10 +45,9 @@ namespace dynamics {
 std::unique_ptr<common::LockableReference>
 ReferentialSkeleton::getLockableReference() const
 {
-  return std::unique_ptr<
+  return common::make_unique<
       common::MultiLockableReference<std::mutex>>(
-          new common::MultiLockableReference<std::mutex>(
-            mPtr, mSkeletonMutexes.begin(), mSkeletonMutexes.end()));
+          mPtr, mSkeletonMutexes.begin(), mSkeletonMutexes.end());
 }
 
 //==============================================================================

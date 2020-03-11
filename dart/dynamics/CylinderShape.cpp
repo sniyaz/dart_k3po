@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -74,8 +74,6 @@ void CylinderShape::setRadius(double _radius)
   mRadius = _radius;
   mIsBoundingBoxDirty = true;
   mIsVolumeDirty = true;
-
-  incrementVersion();
 }
 
 //==============================================================================
@@ -91,8 +89,6 @@ void CylinderShape::setHeight(double _height)
   mHeight = _height;
   mIsBoundingBoxDirty = true;
   mIsVolumeDirty = true;
-
-  incrementVersion();
 }
 
 //==============================================================================

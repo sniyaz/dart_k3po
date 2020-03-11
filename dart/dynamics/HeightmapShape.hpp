@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -42,13 +42,14 @@ namespace dynamics {
 ///
 /// \tparam S_ Data type used for height map. At this point, only double and
 /// float are supported. Short and char can be added at a later point.
-template <typename S_> class HeightmapShape : public Shape {
+template <typename S_>
+class HeightmapShape : public Shape
+{
 public:
   using S = S_;
 
-  using Vector3 = Eigen::Matrix<S, 3, 1>;
-  using HeightField =
-      Eigen::Matrix<S, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  using HeightField
+      = Eigen::Matrix<S, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
   /// Constructor.
   HeightmapShape();
@@ -57,10 +58,10 @@ public:
   ~HeightmapShape() override = default;
 
   // Documentation inherited.
-  const std::string &getType() const override;
+  const std::string& getType() const override;
 
   /// Returns shape type for this class
-  static const std::string &getStaticType();
+  static const std::string& getStaticType();
 
   /// \copydoc Shape::computeInertia()
   ///
@@ -71,61 +72,43 @@ public:
 
   /// Sets scale of this heightmap.
   /// \param[in] scale Scale of the height map.
-  void setScale(const Vector3 &scale);
+  void setScale(const Eigen::Vector3d& scale);
 
   /// Returns scale of this heightmap.
-  const Vector3 &getScale() const;
+  const Eigen::Vector3d& getScale() const;
 
   /// Sets the height field.
   ///
-  /// The data in \e heights will be copied locally. It would be nice to have
-  /// the option to use the values in \e heights directly instead of copying
-  /// them locally to a vector in this class (this would avoid any data being
-  /// kept twice). However some collision engine implementations may require to
-  /// transform the height values, e.g. bullet needs the y values flipped.
-  /// Therefore, a (mutable) copy of the height values passed in \e heights will
-  /// be kept in this class. The copied data can be modified via
+  /// The data in \e heights will be copied locally.
+  /// It would be nice to have the option to use the values in
+  /// \e heights directly instead of copying them locally to a vector in this
+  /// class (this would avoid any data being kept twice). However some
+  /// collision engine implementations may require to transform the height
+  /// values, e.g. bullet needs the y values flipped. Therefore,
+  /// a (mutable) copy of the height values passed in \e heights will be kept
+  /// in this class. The copied data can be modified via
   /// getHeightFieldModifiable() and with flipY().
   ///
   /// \param[in] width Width of the field (x axis)
   /// \param[in] depth Depth of the field (-y axis)
-  /// \param[in] heights The height data of size \e width * \e depth. The
-  /// heights are interpreted as z values, while \e width goes in x direction
-  /// and \e depth in -y (it goes to -y because traditionally images are read
-  /// from top row to bottom row). In the geometry which is to be generated from
-  /// this shape, the min/max height value is also the min/max z value (so if
-  /// the minimum height value is -100, the lowest terrain point will be -100,
-  /// times the z scale to be applied).
-  void setHeightField(const std::size_t &width, const std::size_t &depth,
-                      const std::vector<S> &heights);
-
-  /// Sets the height field.
-  ///
-  /// The data in \e heights will be copied locally. It would be nice to have
-  /// the option to use the values in \e heights directly instead of copying
-  /// them locally to a vector in this class (this would avoid any data being
-  /// kept twice). However some collision engine implementations may require to
-  /// transform the height values, e.g. bullet needs the y values flipped.
-  /// Therefore, a (mutable) copy of the height values passed in \e heights will
-  /// be kept in this class. The copied data can be modified via
-  /// getHeightFieldModifiable() and with flipY().
-  ///
-  /// \param[in] heights The height data of size \e width * \e depth where
-  /// number of columns and number of rows are the width of the field (x axis)
-  /// and the depth of the field (-y axis), respectively. The heights are
-  /// interpreted as z values, while \e width goes in x direction and \e depth
-  /// in -y (it goes to -y because traditionally images are read from top row to
-  /// bottom row). In the geometry which is to be generated from this shape, the
-  /// min/max height value is also the min/max z value (so if the minimum height
-  /// value is -100, the lowest terrain point will be -100, times the z scale to
-  /// be applied).
-  void setHeightField(const HeightField &heights);
+  /// \param[in] heights The height data of size \e width * \e depth.
+  /// The heights are interpreted as z values, while \e width goes in x
+  /// direction and \e depth in -y (it goes to -y because traditionally
+  /// images are read from top row to bottom row).
+  /// In the geometry which is to be generated from this shape, the min/max
+  /// height value is also the min/max z value (so if the minimum height
+  /// value is -100, the lowest terrain point will be -100, times the z
+  /// scale to be applied).
+  void setHeightField(
+      const std::size_t& width,
+      const std::size_t& depth,
+      const std::vector<S>& heights);
 
   /// Returns the height field.
-  const HeightField &getHeightField() const;
+  const HeightField& getHeightField() const;
 
   /// Returns the modified height field. See also setHeightField().
-  HeightField &getHeightFieldModifiable() const;
+  HeightField& getHeightFieldModifiable() const;
 
   /// Flips the y values in the height field.
   void flipY() const;
@@ -142,9 +125,6 @@ public:
   /// Returns the maximum height set by setHeightField()
   S getMaxHeight() const;
 
-  /// Set the color of this arrow
-  void notifyColorUpdated(const Eigen::Vector4d &color) override;
-
 protected:
   // Documentation inherited.
   void updateBoundingBox() const override;
@@ -159,11 +139,11 @@ protected:
   /// Computes the bounding box of the height field.
   /// \param[out] min Mininum of box
   /// \param[out] max Maxinum of box
-  void computeBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+  void computeBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const;
 
 private:
   /// Scale of the heightmap
-  Vector3 mScale;
+  Eigen::Vector3d mScale;
 
   /// Height field
   mutable HeightField mHeights;

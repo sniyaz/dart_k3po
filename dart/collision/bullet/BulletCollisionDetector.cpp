@@ -326,10 +326,6 @@ double BulletCollisionDetector::distance(
 BulletCollisionDetector::BulletCollisionDetector()
   : CollisionDetector()
 {
-  std::cout << "(sniyaz): Control should never reach BulletCollisionDetector()! KILL."
-            << std::endl;
-  exit(0);
-
   mCollisionObjectManager.reset(new ManagerForUnsharableCollisionObjects(this));
 }
 
@@ -950,7 +946,7 @@ createBulletCollisionShapeFromHeightmap(
     const HeightmapShapeT* heightMap)
 {
   // get the heightmap parameters
-  const Eigen::Vector3d scale;
+  const Eigen::Vector3d& scale = heightMap->getScale();
   const auto minHeight = heightMap->getMinHeight();
   const auto maxHeight = heightMap->getMaxHeight();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -131,13 +131,13 @@ SharedLibraryIkFast::SharedLibraryIkFast(InverseKinematics* ik,
 auto SharedLibraryIkFast::clone(InverseKinematics* newIK) const
     -> std::unique_ptr<GradientMethod>
 {
-  return std::unique_ptr<SharedLibraryIkFast>(
-      new SharedLibraryIkFast(newIK,
+  return dart::common::make_unique<SharedLibraryIkFast>(
+      newIK,
       mFilePath,
       mDofs,
       mFreeDofs,
       getMethodName(),
-      getAnalyticalProperties()));
+      getAnalyticalProperties());
 }
 
 //==============================================================================

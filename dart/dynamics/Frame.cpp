@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -73,17 +73,6 @@ Frame* Frame::World()
 {
   static WorldFrame world;
   return &world;
-}
-
-//==============================================================================
-std::shared_ptr<Frame> Frame::WorldShared()
-{
-  struct EnableMakeShared : WorldFrame
-  {
-    EnableMakeShared() : Entity(nullptr, true), WorldFrame() {}
-  };
-  static auto sharedWorld = std::make_shared<EnableMakeShared>();
-  return sharedWorld;
 }
 
 //==============================================================================

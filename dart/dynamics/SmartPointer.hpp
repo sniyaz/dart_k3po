@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -170,11 +170,11 @@ DART_DYNAMICS_MAKE_NODEPTR(ShapeNode)
 #define DART_DYNAMICS_MAKE_IK_PTR(X)                                           \
   class X;                                                                     \
   using X##Ptr = TemplateInverseKinematicsPtr<X, JacobianNodePtr>;             \
-  using Const##X##Ptr =                                                        \
-      TemplateInverseKinematicsPtr<const X, ConstJacobianNodePtr>;             \
+  using Const##X##Ptr                                                          \
+      = TemplateInverseKinematicsPtr<const X, ConstJacobianNodePtr>;           \
   using Weak##X##Ptr = TemplateWeakInverseKinematicsPtr<X, JacobianNodePtr>;   \
-  using WeakConst##X##Ptr =                                                    \
-      TemplateWeakInverseKinematicsPtr<const X, ConstJacobianNodePtr>;
+  using WeakConst##X##Ptr                                                      \
+      = TemplateWeakInverseKinematicsPtr<const X, ConstJacobianNodePtr>;
 
 DART_DYNAMICS_MAKE_IK_PTR(InverseKinematics)
 

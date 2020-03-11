@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -38,23 +38,16 @@
 #include <Eigen/Dense>
 
 #include "dart/common/Deprecated.hpp"
-#include "dart/common/Signal.hpp"
 #include "dart/common/Subject.hpp"
-#include "dart/common/VersionCounter.hpp"
 #include "dart/math/Geometry.hpp"
 #include "dart/dynamics/SmartPointer.hpp"
 
 namespace dart {
 namespace dynamics {
 
-class Shape
-    : public virtual common::Subject,
-      public virtual common::VersionCounter
+class Shape : public virtual common::Subject
 {
 public:
-
-  using VersionChangedSignal
-      = common::Signal<void(Shape* shape, std::size_t version)>;
 
   /// \deprecated Deprecated in 6.1. Please use getType() instead.
   enum ShapeType {
@@ -133,7 +126,7 @@ public:
   double getVolume() const;
 
   /// \brief
-  std::size_t getID() const;
+  int getID() const;
 
   /// \deprecated Deprecated in 6.1. Please use getType() instead.
   DART_DEPRECATED(6.1)
@@ -175,9 +168,6 @@ public:
   /// Notify that the color (rgba) of this shape has updated
   virtual void notifyColorUpdated(const Eigen::Vector4d& color);
 
-  /// Increment the version of this Shape and notify its subscribers
-  std::size_t incrementVersion() override final;
-
 protected:
   /// Updates volume
   virtual void updateVolume() const = 0;
@@ -198,26 +188,17 @@ protected:
   mutable bool mIsVolumeDirty;
 
   /// \brief Unique id.
-  const std::size_t mID;
+  int mID;
 
   /// The DataVariance of this Shape
   unsigned int mVariance;
 
   /// \brief
-  static std::atomic_int mCounter;
+  static int mCounter;
 
   /// \deprecated Deprecated in 6.1. Please use getType() instead.
   /// Type of primitive shpae.
   ShapeType mType;
-
-private:
-  /// Triggered by incrementVersion()
-  VersionChangedSignal mVersionChangedSignal;
-
-public:
-  /// Use this to subscribe to version change signals
-  common::SlotRegister<VersionChangedSignal> onVersionChanged;
-
 };
 
 }  // namespace dynamics

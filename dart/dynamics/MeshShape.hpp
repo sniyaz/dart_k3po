@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -40,6 +40,12 @@
 #include "dart/dynamics/Shape.hpp"
 #include "dart/common/ResourceRetriever.hpp"
 
+namespace Assimp {
+
+class IOSystem;
+
+} // namespace Assimp
+
 namespace dart {
 namespace dynamics {
 
@@ -50,30 +56,7 @@ public:
   {
     MATERIAL_COLOR = 0, ///< Use the colors specified by the Mesh's material
     COLOR_INDEX,        ///< Use the colors specified by aiMesh::mColor
-    SHAPE_COLOR,        ///< Use the color specified by the visual aspect
-  };
-
-  /// Alpha mode to specify how the alpha of this mesh should be determined. The
-  /// final alpha value is affected by ColorMode and visual aspect that holds
-  /// this mesh.
-  enum AlphaMode
-  {
-    /// Blend alphas of visual aspect and mesh. This is the default.
-    /// - MATERIAL_COLOR: Blend the alpha of visual aspect and the alpha values
-    ///                   of the mesh materials.
-    /// - COLOR_INDEX: Blend the alpha of visual aspect and the alpha value of
-    ///                mesh color
-    /// - SHAPE_COLOR: Use the alpha of visual aspect.
-    BLEND = 0,
-
-    /// Use the alpha of mesh or visual aspect.
-    /// - MATERIAL_COLOR: Use the alpha values of mesh materials.
-    /// - COLOR_INDEX: Use the alpha value of mesh color.
-    /// - SHAPE_COLOR: Use the alpha of visual aspect.
-    AUTO,
-
-    /// Always use the alpha of visual aspect.
-    SHAPE_ALPHA
+    SHAPE_COLOR,        ///< Use the color specified by the Shape base class
   };
 
   /// Constructor.
@@ -83,7 +66,7 @@ public:
     common::ResourceRetrieverPtr resourceRetriever = nullptr);
 
   /// Destructor.
-  ~MeshShape() override;
+  virtual ~MeshShape();
 
   // Documentation inherited.
   const std::string& getType() const override;
@@ -98,6 +81,9 @@ public:
   /// version of this function if you want the mesh data to get updated before
   /// rendering
   virtual void update();
+
+  // Documentation inherited
+  void notifyAlphaUpdated(double alpha) override;
 
   void setMesh(
     const aiScene* mesh,
@@ -131,12 +117,6 @@ public:
 
   /// Get the coloring mode that this mesh is using
   ColorMode getColorMode() const;
-
-  /// Sets how the alpha of this mesh should be determined
-  void setAlphaMode(AlphaMode mode);
-
-  /// Returns the alpha mode that this mesh is using
-  AlphaMode getAlphaMode() const;
 
   /// Set which entry in aiMesh::mColor should be used when the color mode is
   /// COLOR_INDEX. This value must be smaller than AI_MAX_NUMBER_OF_COLOR_SETS.
@@ -188,9 +168,6 @@ protected:
 
   /// Specifies how the color of this mesh should be determined
   ColorMode mColorMode;
-
-  /// Specifies how the alpha of this mesh should be determined
-  AlphaMode mAlphaMode;
 
   /// Specifies which color index should be used when mColorMode is COLOR_INDEX
   int mColorIndex;

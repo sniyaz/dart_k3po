@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -63,17 +63,9 @@ public:
   Frame(const Frame&) = delete;
 
   /// Destructor
-  ~Frame() override;
+  virtual ~Frame();
 
   static Frame* World();
-
-  // Shared pointer version for Pythong binding. In the current binding setting,
-  // Frame is always held in std::shared_ptr. This means it will double free
-  // when Frame* World() is used because Frame* World() returns a raw pointer of
-  // static instance. This workaround wouldn't heart the performance too much
-  // because it only creates one additional WorldFrame instance and one
-  // shared_ptr to hold it.
-  static std::shared_ptr<Frame> WorldShared();
 
   //--------------------------------------------------------------------------
   // Transform

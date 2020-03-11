@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -96,12 +96,10 @@ public:
   /// Get the parent (reference) frame of this Entity
   const Frame* getParentFrame() const;
 
-  /// Returns true if and only if this Entity is itself (i.e. this ==
-  /// _someFrame) or depends on (i.e. kinematically descends from) _someFrame.
-  ///
-  /// If _someFrame is nullptr, this returns true in order to accommodate
-  /// BodyNodes which always have a nullptr BodyNode as the parent of a root
-  /// BodyNode.
+  /// True if and only if this Entity depends on (i.e. kinematically descends
+  /// from) _someFrame. If _someFrame is nullptr, this returns true in order to
+  /// accommodate BodyNodes which always have a nullptr BodyNode as the parent
+  /// of a root BodyNode.
   bool descendsFrom(const Frame* _someFrame) const;
 
   /// True iff this Entity is also a Frame.

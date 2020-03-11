@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -49,7 +49,7 @@ void CompositeStateNode<Base>::setNodeState(const Node::State& otherState)
 template <class Base>
 std::unique_ptr<Node::State> CompositeStateNode<Base>::getNodeState() const
 {
-  return std::unique_ptr<State>(new State(common::Composite::getCompositeState()));
+  return common::make_unique<State>(common::Composite::getCompositeState());
 }
 
 //==============================================================================
@@ -74,8 +74,8 @@ template <class Base>
 std::unique_ptr<Node::Properties>
 CompositePropertiesNode<Base>::getNodeProperties() const
 {
-  return std::unique_ptr<Properties>(
-        new Properties(common::Composite::getCompositeProperties()));
+  return common::make_unique<Properties>(
+        common::Composite::getCompositeProperties());
 }
 
 //==============================================================================

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019, The DART development contributors
+ * Copyright (c) 2011-2018, The DART development contributors
  * All rights reserved.
  *
  * The list of contributors can be found at:
@@ -48,7 +48,8 @@ class TranslationalJoint2D;
 namespace detail {
 
 //==============================================================================
-class TranslationalJoint2DUniqueProperties {
+class TranslationalJoint2DUniqueProperties
+{
 public:
   /// Constructor for pre-defined plane types. Defaults to the XY plane if
   /// PlaneType::ARBITRARY is specified.
@@ -58,16 +59,16 @@ public:
   /// Constructor for arbitrary plane types. mPlaneType will be set to
   /// PlaneType::ARBITRARY
   explicit TranslationalJoint2DUniqueProperties(
-      const Eigen::Matrix<double, 3, 2> &transAxes);
+      const Eigen::Matrix<double, 3, 2>& transAxes);
 
   /// Constructor for arbitrary plane types. mPlaneType will be set to
   /// PlaneType::ARBITRARY
-  TranslationalJoint2DUniqueProperties(const Eigen::Vector3d &transAxis1,
-                                       const Eigen::Vector3d &transAxis2);
+  TranslationalJoint2DUniqueProperties(
+      const Eigen::Vector3d& transAxis1, const Eigen::Vector3d& transAxis2);
 
   /// Copy-constructor, customized for robustness
   TranslationalJoint2DUniqueProperties(
-      const TranslationalJoint2DUniqueProperties &other);
+      const TranslationalJoint2DUniqueProperties& other);
 
   virtual ~TranslationalJoint2DUniqueProperties() = default;
 
@@ -81,14 +82,14 @@ public:
   void setZXPlane();
 
   /// Sets plane type as arbitrary plane with two orthogonal translational axes
-  void setArbitraryPlane(const Eigen::Matrix<double, 3, 2> &transAxes);
+  void setArbitraryPlane(const Eigen::Matrix<double, 3, 2>& transAxes);
 
   /// Sets plane type as arbitrary plane with two orthogonal translational axes
-  void setArbitraryPlane(const Eigen::Vector3d &transAxis1,
-                         const Eigen::Vector3d &transAxis2);
+  void setArbitraryPlane(
+      const Eigen::Vector3d& transAxis1, const Eigen::Vector3d& transAxis2);
 
   /// Returns first and second translational axes
-  const Eigen::Matrix<double, 3, 2> &getTranslationalAxes() const;
+  const Eigen::Matrix<double, 3, 2>& getTranslationalAxes() const;
 
   /// Returns first translational axis
   Eigen::Vector3d getTranslationalAxis1() const;
@@ -109,23 +110,24 @@ private:
 
 //==============================================================================
 struct TranslationalJoint2DProperties : GenericJoint<math::R2Space>::Properties,
-                                        TranslationalJoint2DUniqueProperties {
+                                        TranslationalJoint2DUniqueProperties
+{
   DART_DEFINE_ALIGNED_SHARED_OBJECT_CREATOR(TranslationalJoint2DProperties)
 
   TranslationalJoint2DProperties(
-      const GenericJoint<math::R2Space>::Properties &genericJointProperties =
-          GenericJoint<math::R2Space>::Properties(),
-      const TranslationalJoint2DUniqueProperties &universalProperties =
-          TranslationalJoint2DUniqueProperties());
+      const GenericJoint<math::R2Space>::Properties& genericJointProperties
+      = GenericJoint<math::R2Space>::Properties(),
+      const TranslationalJoint2DUniqueProperties& universalProperties
+      = TranslationalJoint2DUniqueProperties());
 
   virtual ~TranslationalJoint2DProperties() = default;
 };
 
 //==============================================================================
-using TranslationalJoint2DBase =
-    common::EmbedPropertiesOnTopOf<TranslationalJoint2D,
-                                   TranslationalJoint2DUniqueProperties,
-                                   GenericJoint<math::R2Space>>;
+using TranslationalJoint2DBase
+    = common::EmbedPropertiesOnTopOf<TranslationalJoint2D,
+                                     TranslationalJoint2DUniqueProperties,
+                                     GenericJoint<math::R2Space>>;
 
 } // namespace detail
 } // namespace dynamics
