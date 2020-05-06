@@ -219,7 +219,62 @@ bool SharedLibraryIkFast::computeIk(
     return false;
   }
 
-  return mComputeIk(targetTranspose, targetRotation, freeParams, solutions);
+  bool retVal = mComputeIk(targetTranspose, targetRotation, freeParams, solutions);
+
+  // NOTE (sniyaz): Verify that, from the *root* ikFast lib, the solutions can
+  // differ call-to-call.
+  const auto numSolutions = solutions.GetNumSolutions();
+
+  for (auto i = 0u; i < numSolutions; ++i)
+  {
+    const auto& ikfastSolution = solutions.GetSolution(i);
+
+    std::vector<IkReal> solutionValues(6);
+    std::vector<IkReal> freeValues(0);
+
+    ikfastSolution.GetSolution(solutionValues, freeValues);
+
+    Eigen::VectorXd qSol(6);
+    for (auto i = 0u; i < solutionValues.size(); ++i)
+    {
+      qSol[i] = solutionValues[i];
+    }
+
+    // NOTE: Catch the config we want.
+    Eigen::VectorXd catchConfig(6);
+    catchConfig <<
+      -2.023936768775115,
+      2.517857694668181,
+      0.9183705698980704,
+      0.148580137223858,
+      0.9931402197061214,
+      -0.8853698388464197;
+    double tol = 1e-10;
+
+    if (qSol.isApprox(catchConfig, tol))
+    {
+      std::cout << "[ikFast] raw config: " << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::endl;
+      std::cout << qSol << std::endl;
+
+      std::cout << "[ikFast] Target POSE" << std::endl;
+      std::cout <<
+        targetRotation[0*3+0] << " " <<
+        targetRotation[0*3+1] << " " <<
+        targetRotation[0*3+2] << " " <<
+        targetRotation[1*3+0] << " " <<
+        targetRotation[1*3+1] << " " <<
+        targetRotation[1*3+2] << " " <<
+        targetRotation[2*3+0] << " " <<
+        targetRotation[2*3+1] << " " <<
+        targetRotation[2*3+2] << " " <<
+
+        targetTranspose[0] << " " <<
+        targetTranspose[1] << " " <<
+        targetTranspose[2] << std::endl;
+    }
+  }
+
+  return retVal;
 }
 
 //==============================================================================

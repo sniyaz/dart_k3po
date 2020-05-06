@@ -141,11 +141,11 @@ void convertIkSolution(
     -0.8853698388464197;
   double tol = 1e-10;
 
-  if (solution.mConfig.isApprox(catchConfig, tol))
-  {
-    std::cout << "[ikFast] raw config: " << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::endl;
-    std::cout << solution.mConfig << std::endl;
-  }
+  // if (solution.mConfig.isApprox(catchConfig, tol))
+  // {
+  //   std::cout << "[ikFast] raw config: " << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::endl;
+  //   std::cout << solution.mConfig << std::endl;
+  // }
 
   solution.mValidity
       = limitViolated ? InverseKinematics::Analytical::LIMIT_VIOLATED
@@ -349,27 +349,27 @@ auto IkFast::computeSolutions(const Eigen::Isometry3d& desiredBodyTf)
     -0.8853698388464197;
   double tol = 1e-10;
 
-  for (auto solution : mSolutions)
-  {
-    if (solution.mConfig.isApprox(catchConfig, tol))
-    {
-      std::cout << "ORIG POSE" << std::endl;
-      std::cout <<
-        mTargetRotation[0*3+0] << " " <<
-        mTargetRotation[0*3+1] << " " <<
-        mTargetRotation[0*3+2] << " " <<
-        mTargetRotation[1*3+0] << " " <<
-        mTargetRotation[1*3+1] << " " <<
-        mTargetRotation[1*3+2] << " " <<
-        mTargetRotation[2*3+0] << " " <<
-        mTargetRotation[2*3+1] << " " <<
-        mTargetRotation[2*3+2] << " " <<
-
-        mTargetTranspose[0] << " " <<
-        mTargetTranspose[1] << " " <<
-        mTargetTranspose[2] << std::endl;
-    }
-  }
+  // for (auto solution : mSolutions)
+  // {
+  //   if (solution.mConfig.isApprox(catchConfig, tol))
+  //   {
+  //     std::cout << "ORIG POSE" << std::endl;
+  //     std::cout <<
+  //       mTargetRotation[0*3+0] << " " <<
+  //       mTargetRotation[0*3+1] << " " <<
+  //       mTargetRotation[0*3+2] << " " <<
+  //       mTargetRotation[1*3+0] << " " <<
+  //       mTargetRotation[1*3+1] << " " <<
+  //       mTargetRotation[1*3+2] << " " <<
+  //       mTargetRotation[2*3+0] << " " <<
+  //       mTargetRotation[2*3+1] << " " <<
+  //       mTargetRotation[2*3+2] << " " <<
+  //
+  //       mTargetTranspose[0] << " " <<
+  //       mTargetTranspose[1] << " " <<
+  //       mTargetTranspose[2] << std::endl;
+  //   }
+  // }
 
   return mSolutions;
 }
