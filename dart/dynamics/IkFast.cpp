@@ -130,6 +130,23 @@ void convertIkSolution(
     index++;
   }
 
+  // NOTE: Catch the config we want.
+  Eigen::VectorXd catchConfig(6);
+  catchConfig <<
+    -2.023936768775115,
+    2.517857694668181,
+    0.9183705698980704,
+    0.148580137223858,
+    0.9931402197061214,
+    -0.8853698388464197;
+  double tol = 1e-10;
+
+  if (solution.mConfig.isApprox(catchConfig, tol))
+  {
+    std::cout << "[ikFast] raw config: " << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::endl;
+    std::cout << solution.mConfig << std::endl;
+  }
+
   solution.mValidity
       = limitViolated ? InverseKinematics::Analytical::LIMIT_VIOLATED
                       : InverseKinematics::Analytical::VALID;
@@ -317,6 +334,41 @@ auto IkFast::computeSolutions(const Eigen::Isometry3d& desiredBodyTf)
           getNumFreeParameters(),
           getFreeParameters(),
           solutions, mSolutions);
+  }
+
+  // NOTE: Loops to check if this is one of the "problem" solutions with valgrind.
+  // Print the orig target pose just to make sure it's correct.
+  // NOTE: Catch the config we want.
+  Eigen::VectorXd catchConfig(6);
+  catchConfig <<
+    -2.023936768775115,
+    2.517857694668181,
+    0.9183705698980704,
+    0.148580137223858,
+    0.9931402197061214,
+    -0.8853698388464197;
+  double tol = 1e-10;
+
+  for (auto solution : mSolutions)
+  {
+    if (solution.mConfig.isApprox(catchConfig, tol))
+    {
+      std::cout << "ORIG POSE" << std::endl;
+      std::cout <<
+        mTargetRotation[0*3+0] << " " <<
+        mTargetRotation[0*3+1] << " " <<
+        mTargetRotation[0*3+2] << " " <<
+        mTargetRotation[1*3+0] << " " <<
+        mTargetRotation[1*3+1] << " " <<
+        mTargetRotation[1*3+2] << " " <<
+        mTargetRotation[2*3+0] << " " <<
+        mTargetRotation[2*3+1] << " " <<
+        mTargetRotation[2*3+2] << " " <<
+
+        mTargetTranspose[0] << " " <<
+        mTargetTranspose[1] << " " <<
+        mTargetTranspose[2] << std::endl;
+    }
   }
 
   return mSolutions;
